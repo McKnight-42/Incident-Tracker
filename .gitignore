@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+.env/
+.env
+# Windows specific virtual environment
+Scripts/
+# macOS specific virtual environment
+bin/
+
+# Editor-specific files
+.vscode/        # VS Code
+.idea/          # PyCharm
+*.sublime-workspace # Sublime Text
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# OS generated files
+.DS_Store       # macOS
+Thumbs.db       # Windows
+
+# Test and coverage artifacts
+.coverage
+.cache/
+htmlcov/

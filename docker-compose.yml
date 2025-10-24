@@ -1,0 +1,31 @@
+services:
+  api:
+    build: .
+    container_name: outage-sim-api
+    working_dir: /app/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./app:/app/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:15-alpine
+    container_name: outage-sim-db
+    restart: always
+    environment:
+      POSTGRES_USER: sim_user
+      POSTGRES_PASSWORD: sim_pass
+      POSTGRES_DB: outagesim
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
