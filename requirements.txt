@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 sqlalchemy
 psycopg2-binary
 alembic
@@ -8,3 +8,4 @@ apscheduler
 python-dotenv
 pytest
 loguru
+
