@@ -1,17 +1,23 @@
 # Base image
 FROM python:3.11-slim
 
+# Dockerfile
 WORKDIR /app
 
-# Copy requirements from root
+# Copy requirements first
 COPY requirements.txt .
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && \
+    apt-get install -y postgresql-client && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy app source code
 COPY app/ ./app
 
-EXPOSE 8000
+# Copy entrypoint script from repo root
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]

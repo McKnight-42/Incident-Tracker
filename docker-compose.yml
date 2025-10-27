@@ -3,7 +3,7 @@ services:
     build: .
     container_name: outage-sim-api
     working_dir: /app        # project root
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: sh /app/entrypoint.sh
     volumes:
       - ./:/app              # mount entire project
     ports:
