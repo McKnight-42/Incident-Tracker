@@ -17,3 +17,8 @@ def read_root():
 - Includes routes from the /api package.
 - Starts background monitoring task (scheduler).
 """
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
