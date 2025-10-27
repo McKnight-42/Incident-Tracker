@@ -7,5 +7,7 @@ pydantic
 apscheduler
 python-dotenv
 pytest
+pytest-asyncio
 loguru
+httpx
 
