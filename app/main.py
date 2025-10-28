@@ -16,5 +16,5 @@ async def health_check():
     return {"status": "ok"}
 
 # Include routers
-app.include_router(services.router, prefix="/services", tags=["services"])
-app.include_router(incidents.router, prefix="/incidents", tags=["incidents"])
+app.include_router(services.router)
+app.include_router(incidents.router)
