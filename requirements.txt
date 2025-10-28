@@ -12,3 +12,4 @@ loguru
 httpx
 pre-commit
 black
+ruff
