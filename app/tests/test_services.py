@@ -1,9 +1,9 @@
 def test_create_service(client):
-    response = client.post("/services/", json={"name": "API Gateway", "status": "up"})
+    response = client.post("/services/", json={"name": "API Gateway"}) # default set in schema `operational``
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "API Gateway"
-    assert data["status"] == "up"
+    assert data["status"] == "operational"
     assert "id" in data
 
 def test_list_services(client):
