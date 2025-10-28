@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import routes_services, routes_incidents
+from app.api import incidents, services
 
 app = FastAPI(
     title="Incident Tracker API",
@@ -16,5 +16,5 @@ async def health_check():
     return {"status": "ok"}
 
 # Include routers
-app.include_router(routes_services.router)
-app.include_router(routes_incidents.router)
+app.include_router(services.router, prefix="/services", tags=["services"])
+app.include_router(incidents.router, prefix="/incidents", tags=["incidents"])

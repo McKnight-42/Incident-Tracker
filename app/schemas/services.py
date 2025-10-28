@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import datetime
-from .incident import IncidentRead
+from .incidents import IncidentRead
 
 
 class ServiceBase(BaseModel):
