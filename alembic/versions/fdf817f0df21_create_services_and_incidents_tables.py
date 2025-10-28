@@ -1,7 +1,7 @@
 """create services and incidents tables
 
 Revision ID: fdf817f0df21
-Revises: 
+Revises:
 Create Date: 2025-10-27 05:48:09.706007
 
 """
