@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.db import models
 from app.schemas.incidents import IncidentCreate, IncidentRead
 
-router = APIRouter(prefix="/incidents", tags=["incidents"])
+router = APIRouter()
 
 @router.post("/", response_model=IncidentRead)
 def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):

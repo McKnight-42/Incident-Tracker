@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.db import models
 from app.schemas.services import ServiceCreate, ServiceRead
 
-router = APIRouter(prefix="/services", tags=["services"])
+router = APIRouter()
 
 @router.post("/", response_model=ServiceRead)
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
