@@ -1,39 +1,58 @@
-# Byte-compiled / optimized / compiled Python files
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environments
+# Virtual environment
 .venv/
 venv/
 env/
+ENV/
 
 # Environment files
-.env                # ignore actual env file
-# .env.example       # DO NOT ignore — commit as template
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+!.env.example
 
-# OS generated files
-.DS_Store           # macOS
-Thumbs.db           # Windows
-
-# Editor-specific files
-.vscode/            # VS Code
-.idea/              # PyCharm
-*.sublime-workspace # Sublime Text
-
-# Logs
-*.log
-
-# Databases
-*.sqlite3
-
-# Test / coverage artifacts
-.coverage
+# Pytest cache
+.pytest_cache/
 .cache/
-htmlcov/
 
-# Docker volumes (optional, usually not tracked)
+# Ruff / Black / coverage
+.ruff_cache/
+.mypy_cache/
+coverage.xml
+htmlcov/
+.coverage*
+
+# IDE / OS junk
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Alembic
+alembic/versions/__pycache__/
+alembic/versions/*.pyc
+
+# Docker
+*.log
+*.pid
+*.seed
 docker-compose.override.yml
 
-# Local test database
+# Build / distribution artifacts
+build/
+dist/
+*.egg-info/
+
+# Local database files
+*.db
+*.sqlite3
+
+# potential local test file names
+dev.db
 test.db

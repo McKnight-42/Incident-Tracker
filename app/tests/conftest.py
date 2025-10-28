@@ -19,6 +19,7 @@ engine = create_engine(
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # Create tables before tests and drop after
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
@@ -29,6 +30,7 @@ def setup_database():
     if os.path.exists(TEST_DB_FILE):
         os.remove(TEST_DB_FILE)
 
+
 # Provide a fresh session for direct DB access
 @pytest.fixture
 def db_session():
@@ -37,6 +39,7 @@ def db_session():
         yield db
     finally:
         db.close()
+
 
 # FastAPI TestClient with dependency override
 @pytest.fixture

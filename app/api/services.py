@@ -8,6 +8,7 @@ from app.schemas.services import ServiceCreate, ServiceRead
 
 router = APIRouter()
 
+
 @router.post("/", response_model=ServiceRead)
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     db_service = models.Service(**service.model_dump())
@@ -16,9 +17,11 @@ def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     db.refresh(db_service)
     return db_service
 
+
 @router.get("/", response_model=List[ServiceRead])
 def list_services(db: Session = Depends(get_db)):
     return db.query(models.Service).all()
+
 
 @router.get("/{service_id}", response_model=ServiceRead)
 def get_service(service_id: int, db: Session = Depends(get_db)):

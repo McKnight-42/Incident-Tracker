@@ -8,6 +8,7 @@ from app.schemas.incidents import IncidentCreate, IncidentRead
 
 router = APIRouter()
 
+
 @router.post("/", response_model=IncidentRead)
 def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
     db_incident = models.Incident(**incident.model_dump())
@@ -16,13 +17,17 @@ def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
     db.refresh(db_incident)
     return db_incident
 
+
 @router.get("/", response_model=List[IncidentRead])
 def list_incidents(db: Session = Depends(get_db)):
     return db.query(models.Incident).all()
 
+
 @router.get("/{incident_id}", response_model=IncidentRead)
 def get_incident(incident_id: int, db: Session = Depends(get_db)):
-    incident = db.query(models.Incident).filter(models.Incident.id == incident_id).first()
+    incident = (
+        db.query(models.Incident).filter(models.Incident.id == incident_id).first()
+    )
     if not incident:
         raise HTTPException(status_code=404, detail="Incident not found")
     return incident

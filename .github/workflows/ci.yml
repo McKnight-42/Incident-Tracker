@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: sim_user
+          POSTGRES_PASSWORD: sim_pass
+          POSTGRES_DB: outagesim
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U sim_user -d outagesim"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: postgresql+psycopg2://sim_user:sim_pass@localhost:5432/outagesim
+      PYTHONUNBUFFERED: 1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run linters
+        run: |
+          black --check .
+          ruff check .
+
+      - name: Run tests
+        run: |
+          pytest -v

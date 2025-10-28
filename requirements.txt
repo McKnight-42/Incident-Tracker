@@ -10,4 +10,5 @@ pytest
 pytest-asyncio
 loguru
 httpx
-
+pre-commit
+black

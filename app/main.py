@@ -7,13 +7,16 @@ app = FastAPI(
     version="0.1.0",
 )
 
+
 @app.get("/")
 def read_root():
     return {"message": "Incident Tracker API running!"}
 
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
+
 
 # Include routers
 app.include_router(services.router, prefix="/services", tags=["services"])

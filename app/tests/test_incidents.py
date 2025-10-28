@@ -1,8 +1,10 @@
-import pytest
-
 def test_create_incident(client):
     # Create a service first (required foreign key)
-    service_data = {"name": "Email Service", "status": "operational", "last_checked": "2025-10-27T00:00:00"}
+    service_data = {
+        "name": "Email Service",
+        "status": "operational",
+        "last_checked": "2025-10-27T00:00:00",
+    }
     service_resp = client.post("/services/", json=service_data)
     assert service_resp.status_code == 200
     service = service_resp.json()
@@ -12,7 +14,7 @@ def test_create_incident(client):
         "service_id": service["id"],
         "description": "Email delivery delayed",
         "start_time": "2025-10-27T00:00:00",
-        "resolved_time": None
+        "resolved_time": None,
     }
     response = client.post("/incidents/", json=incident_data)
     assert response.status_code == 200
