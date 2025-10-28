@@ -34,3 +34,6 @@ htmlcov/
 
 # Docker volumes (optional, usually not tracked)
 docker-compose.override.yml
+
+# Local test database
+test.db
