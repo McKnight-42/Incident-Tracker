@@ -4,7 +4,7 @@ from typing import List
 
 from app.db.session import get_db
 from app.db import models
-from app.schemas.incident import IncidentCreate, IncidentRead
+from app.schemas.incidents import IncidentCreate, IncidentRead
 
 router = APIRouter(prefix="/incidents", tags=["incidents"])
 

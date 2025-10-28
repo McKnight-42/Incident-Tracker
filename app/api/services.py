@@ -4,7 +4,7 @@ from typing import List
 
 from app.db.session import get_db
 from app.db import models
-from app.schemas.service import ServiceCreate, ServiceRead
+from app.schemas.services import ServiceCreate, ServiceRead
 
 router = APIRouter(prefix="/services", tags=["services"])
 
