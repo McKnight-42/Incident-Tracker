@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 .venv/
 venv/
 env/
@@ -11,24 +11,22 @@ ENV/
 
 # Environment files
 .env
-.env.local
-.env.development
-.env.production
-.env.test
+.env.*
 !.env.example
 
-# Pytest cache
+# Testing / cache
 .pytest_cache/
 .cache/
-
-# Ruff / Black / coverage
-.ruff_cache/
-.mypy_cache/
+.coverage
+.coverage.*
 coverage.xml
 htmlcov/
-.coverage*
 
-# IDE / OS junk
+# Ruff / MyPy / formatting tools
+.ruff_cache/
+.mypy_cache/
+
+# IDE / OS files
 .vscode/
 .idea/
 .DS_Store
@@ -38,7 +36,7 @@ Thumbs.db
 alembic/versions/__pycache__/
 alembic/versions/*.pyc
 
-# Docker
+# Docker / runtime logs
 *.log
 *.pid
 *.seed
@@ -49,10 +47,11 @@ build/
 dist/
 *.egg-info/
 
-# Local database files
+# Local database / dev files
 *.db
 *.sqlite3
-
-# potential local test file names
 dev.db
 test.db
+
+# Misc
+.envrc
