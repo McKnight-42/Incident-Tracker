@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, constr, field_validator
 from typing import Optional, List, Literal
 from datetime import datetime
-from .incidents import IncidentRead
+from .incident import IncidentRead
 
 
 class ServiceBase(BaseModel):
