@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import List
-from app.db.session import get_db
+from app.db.database import get_db
 from app.db import models
-from app.schemas.services import ServiceCreate, ServiceRead
+from app.schemas.service import ServiceCreate, ServiceRead
 
 router = APIRouter()
 

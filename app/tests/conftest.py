@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.db.models import Base
-from app.db.session import get_db
+from app.db.database import get_db
 
 # File-based SQLite DB for testing
 TEST_DB_FILE = "./test.db"

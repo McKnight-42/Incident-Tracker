@@ -4,18 +4,12 @@ from logging.config import fileConfig
 from sqlalchemy import create_engine, pool
 from alembic import context
 
-# -----------------------------------------------------------------------------
-# Alembic Config object
-# -----------------------------------------------------------------------------
 config = context.config
 
 # Interpret the config file for Python logging.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# -----------------------------------------------------------------------------
-# Try to import DATABASE_URL and Base from your app
-# -----------------------------------------------------------------------------
 DATABASE_URL = None
 Base = None
 
@@ -50,9 +44,6 @@ target_metadata = Base.metadata
 print(f"✅ Using DATABASE_URL: {DATABASE_URL}")
 
 
-# -----------------------------------------------------------------------------
-# Migration functions
-# -----------------------------------------------------------------------------
 def run_migrations_offline():
     """Run migrations in 'offline' mode."""
     context.configure(
