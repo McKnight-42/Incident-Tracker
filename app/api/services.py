@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from typing import List
-
 from app.db.session import get_db
 from app.db import models
 from app.schemas.services import ServiceCreate, ServiceRead
@@ -13,7 +13,13 @@ router = APIRouter()
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     db_service = models.Service(**service.model_dump())
     db.add(db_service)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400, detail="Service with this name already exists"
+        )
     db.refresh(db_service)
     return db_service
 

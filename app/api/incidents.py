@@ -11,6 +11,13 @@ router = APIRouter()
 
 @router.post("/", response_model=IncidentRead)
 def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
+    service = (
+        db.query(models.Service)
+        .filter(models.Service.id == incident.service_id)
+        .first()
+    )
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
     db_incident = models.Incident(**incident.model_dump())
     db.add(db_incident)
     db.commit()
