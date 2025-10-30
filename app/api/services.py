@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.exc import IntegrityError
 from typing import List
 from app.db.database import get_db
@@ -9,7 +9,7 @@ from app.schemas.service import ServiceCreate, ServiceRead
 router = APIRouter()
 
 
-@router.post("/", response_model=ServiceRead)
+@router.post("/", response_model=ServiceRead, status_code=201)
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     db_service = models.Service(**service.model_dump())
     db.add(db_service)
@@ -31,7 +31,12 @@ def list_services(db: Session = Depends(get_db)):
 
 @router.get("/{service_id}", response_model=ServiceRead)
 def get_service(service_id: int, db: Session = Depends(get_db)):
-    service = db.query(models.Service).filter(models.Service.id == service_id).first()
+    service = (
+        db.query(models.Service)
+        .options(selectinload(models.Service.incidents))
+        .filter(models.Service.id == service_id)
+        .first()
+    )
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
     return service

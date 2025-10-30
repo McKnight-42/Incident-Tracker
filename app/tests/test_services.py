@@ -3,7 +3,7 @@ def test_create_service(client):
     response = client.post(
         "/services/", json={"name": "API Gateway"}
     )  # default set in schema `operational`
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["name"] == "API Gateway"
     assert data["status"] == "operational"
@@ -28,13 +28,10 @@ def test_get_service_by_id(client):
     assert data["id"] == service_id
 
 
-# --- Nested / Relationship Tests --- #
 def test_service_includes_incidents(client):
-    # Create service
     service_resp = client.post("/services/", json={"name": "NestedService"})
     service = service_resp.json()
 
-    # Add incidents to that service
     incidents_data = [
         {"service_id": service["id"], "description": "Nested Incident 1"},
         {"service_id": service["id"], "description": "Nested Incident 2"},
@@ -42,7 +39,6 @@ def test_service_includes_incidents(client):
     for incident in incidents_data:
         client.post("/incidents/", json=incident)
 
-    # Fetch service and verify incidents
     response = client.get(f"/services/{service['id']}")
     data = response.json()
     assert response.status_code == 200
@@ -85,5 +81,5 @@ def test_service_name_whitespace_only(client):
 def test_create_service_missing_status(client):
     response = client.post("/services/", json={"name": "NoStatusService"})
     data = response.json()
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert data["status"] == "operational"  # default value

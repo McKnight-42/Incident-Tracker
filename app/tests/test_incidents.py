@@ -14,7 +14,7 @@ def test_create_incident(client):
         "resolved_time": None,
     }
     response = client.post("/incidents/", json=incident_data)
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["description"] == "Email delivery delayed"
     assert data["service_id"] == service["id"]
@@ -72,6 +72,19 @@ def test_create_incident_missing_description(client):
     assert response.status_code == 422
 
 
+def test_create_incident_with_invalid_times(client):
+    service = client.post("/services/", json={"name": "TimeTest"}).json()
+    incident_data = {
+        "service_id": service["id"],
+        "description": "Time travel incident",
+        "start_time": "2025-10-28T10:00:00",
+        "resolved_time": "2025-10-27T10:00:00",
+    }
+    response = client.post("/incidents/", json=incident_data)
+    assert response.status_code == 422
+    assert "resolved_time cannot be before start_time" in str(response.json())
+
+
 # --- Additional Edge Cases --- #
 def test_create_incident_missing_service_id(client):
     incident_data = {"description": "No service provided"}
@@ -90,7 +103,8 @@ def test_create_incident_resolved_before_start(client):
         "resolved_time": "2025-10-27T00:00:00",
     }
     response = client.post("/incidents/", json=incident_data)
-    assert response.status_code == 200
+    assert response.status_code == 422
+    assert "resolved_time cannot be before start_time" in str(response.json())
 
 
 def test_create_incident_invalid_types(client):

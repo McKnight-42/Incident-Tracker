@@ -9,7 +9,7 @@ from app.schemas.incident import IncidentCreate, IncidentRead
 router = APIRouter()
 
 
-@router.post("/", response_model=IncidentRead)
+@router.post("/", response_model=IncidentRead, status_code=201)
 def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
     service = (
         db.query(models.Service)

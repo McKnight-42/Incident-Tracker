@@ -1,5 +1,3 @@
-# app/tests/conftest.py
-
 import os
 import pytest
 from sqlalchemy import create_engine
@@ -10,7 +8,6 @@ from app.main import app
 from app.db.models import Base
 from app.db.database import get_db
 
-# File-based SQLite DB for testing
 TEST_DB_FILE = "./test.db"
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{TEST_DB_FILE}"
 
@@ -20,13 +17,11 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# Create tables before tests and drop after
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
-    # Delete the test.db file
     if os.path.exists(TEST_DB_FILE):
         os.remove(TEST_DB_FILE)
 
@@ -41,17 +36,16 @@ def db_session():
         db.close()
 
 
-# FastAPI TestClient with dependency override
 @pytest.fixture
 def client():
+    # shared session for all requests in this test
+    db = TestingSessionLocal()
+
     def override_get_db():
-        db = TestingSessionLocal()
-        try:
-            yield db
-        finally:
-            db.close()
+        yield db
 
     app.dependency_overrides[get_db] = override_get_db
-    client = TestClient(app)
-    yield client
+    with TestClient(app) as c:
+        yield c
+    db.close()
     app.dependency_overrides.clear()
