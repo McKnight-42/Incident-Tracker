@@ -32,8 +32,6 @@ def test_service_includes_incidents(client):
     service_resp = client.post("/services/", json={"name": "NestedService"})
     service = service_resp.json()
 
-    # Test that incidents can be created without start_time (auto-generated)
-    # and with explicit start_time (for backdating)
     incidents_data = [
         {
             "service_id": service["id"],
@@ -65,7 +63,7 @@ def test_create_service_invalid_status(client):
     response = client.post(
         "/services/", json={"name": "Cache Service", "status": "invalid_status"}
     )
-    assert response.status_code == 422  # Pydantic validation for Literal
+    assert response.status_code == 422
 
 
 def test_get_service_not_found(client):
