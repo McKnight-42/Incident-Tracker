@@ -20,6 +20,33 @@ def test_create_incident(client):
     assert data["service_id"] == service["id"]
 
 
+def test_create_incident_auto_start_time(client):
+    # Create a service first
+    service_resp = client.post(
+        "/services/", json={"name": "AutoTime Service", "status": "operational"}
+    )
+    service = service_resp.json()
+
+    # Create an incident without start_time - should auto-generate
+    from datetime import datetime
+
+    before = datetime.now()
+    incident_data = {
+        "service_id": service["id"],
+        "description": "Incident with auto-generated start_time",
+    }
+    response = client.post("/incidents/", json=incident_data)
+    after = datetime.now()
+
+    assert response.status_code == 201
+    data = response.json()
+    assert data["description"] == "Incident with auto-generated start_time"
+    assert "start_time" in data
+    # Verify the start_time was auto-generated and is recent
+    start_time = datetime.fromisoformat(data["start_time"].replace("Z", "+00:00"))
+    assert before <= start_time <= after
+
+
 def test_list_incidents(client):
     response = client.get("/incidents/")
     assert response.status_code == 200

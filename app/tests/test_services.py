@@ -32,12 +32,23 @@ def test_service_includes_incidents(client):
     service_resp = client.post("/services/", json={"name": "NestedService"})
     service = service_resp.json()
 
+    # Test that incidents can be created without start_time (auto-generated)
+    # and with explicit start_time (for backdating)
     incidents_data = [
-        {"service_id": service["id"], "description": "Nested Incident 1"},
-        {"service_id": service["id"], "description": "Nested Incident 2"},
+        {
+            "service_id": service["id"],
+            "description": "Nested Incident 1",
+            # start_time will be auto-generated
+        },
+        {
+            "service_id": service["id"],
+            "description": "Nested Incident 2",
+            "start_time": "2025-10-27T01:00:00",  # explicit time for backdating
+        },
     ]
     for incident in incidents_data:
-        client.post("/incidents/", json=incident)
+        incident_resp = client.post("/incidents/", json=incident)
+        assert incident_resp.status_code == 201
 
     response = client.get(f"/services/{service['id']}")
     data = response.json()
