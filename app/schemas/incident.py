@@ -8,7 +8,7 @@ from pydantic import (
     Field,
 )
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 class IncidentBase(BaseModel):
@@ -33,7 +33,7 @@ class IncidentCreate(BaseModel):
     description: Annotated[
         str, StringConstraints(strip_whitespace=True, min_length=1, max_length=255)
     ]
-    start_time: datetime = Field(default_factory=datetime.now)
+    start_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
     resolved_time: Optional[datetime] = None
 
     @field_validator("resolved_time")
