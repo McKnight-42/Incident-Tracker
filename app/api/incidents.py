@@ -10,7 +10,9 @@ router = APIRouter()
 
 
 @router.post("/", response_model=IncidentRead, status_code=201)
-def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
+def create_incident(
+    incident: IncidentCreate, db: Session = Depends(get_db)
+) -> IncidentRead:
     service = (
         db.query(models.Service)
         .filter(models.Service.id == incident.service_id)
@@ -26,12 +28,12 @@ def create_incident(incident: IncidentCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[IncidentRead])
-def list_incidents(db: Session = Depends(get_db)):
+def list_incidents(db: Session = Depends(get_db)) -> IncidentRead:
     return db.query(models.Incident).all()
 
 
 @router.get("/{incident_id}", response_model=IncidentRead)
-def get_incident(incident_id: int, db: Session = Depends(get_db)):
+def get_incident(incident_id: int, db: Session = Depends(get_db)) -> IncidentRead:
     incident = (
         db.query(models.Incident).filter(models.Incident.id == incident_id).first()
     )

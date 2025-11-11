@@ -10,7 +10,9 @@ router = APIRouter()
 
 
 @router.post("/", response_model=ServiceRead, status_code=201)
-def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
+def create_service(
+    service: ServiceCreate, db: Session = Depends(get_db)
+) -> ServiceRead:
     db_service = models.Service(**service.model_dump())
     db.add(db_service)
     try:
@@ -25,12 +27,12 @@ def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[ServiceRead])
-def list_services(db: Session = Depends(get_db)):
+def list_services(db: Session = Depends(get_db)) -> ServiceRead:
     return db.query(models.Service).all()
 
 
 @router.get("/{service_id}", response_model=ServiceRead)
-def get_service(service_id: int, db: Session = Depends(get_db)):
+def get_service(service_id: int, db: Session = Depends(get_db)) -> ServiceRead:
     service = (
         db.query(models.Service)
         .options(selectinload(models.Service.incidents))

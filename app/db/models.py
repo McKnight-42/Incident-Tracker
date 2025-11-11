@@ -1,5 +1,6 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, func
+from sqlalchemy import String, ForeignKey, func, DateTime
+from .mixins import TimestampMixin
 import datetime
 
 
@@ -7,7 +8,7 @@ class Base(DeclarativeBase):
     pass
 
 
-class Service(Base):
+class Service(Base, TimestampMixin):
     __tablename__ = "services"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -20,14 +21,14 @@ class Service(Base):
     incidents = relationship("Incident", back_populates="service")
 
 
-class Incident(Base):
+class Incident(Base, TimestampMixin):
     __tablename__ = "incidents"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     service_id: Mapped[int] = mapped_column(ForeignKey("services.id"))
     description: Mapped[str] = mapped_column(String(100))
     start_time: Mapped[datetime.datetime] = mapped_column(
-        server_default=func.now(),
+        DateTime(timezone=True), server_default=func.now()
     )
     resolved_time: Mapped[datetime.datetime] = mapped_column(nullable=True)
 

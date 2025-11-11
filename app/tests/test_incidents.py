@@ -20,29 +20,36 @@ def test_create_incident(client):
     assert data["service_id"] == service["id"]
 
 
-def test_create_incident_auto_start_time(client):
-    service_resp = client.post(
-        "/services/", json={"name": "AutoTime Service", "status": "operational"}
-    )
+def test_create_incident_auto_start_time_db_generated(client):
+    service_resp = client.post("/services/", json={"name": "DBTimestampService"})
+    assert service_resp.status_code == 201
     service = service_resp.json()
 
-    from datetime import datetime
+    from datetime import datetime, timezone
 
-    before = datetime.now()
+    before = datetime.now(timezone.utc)
     incident_data = {
         "service_id": service["id"],
-        "description": "Incident with auto-generated start_time",
+        "description": "Incident without explicit start_time",
     }
     response = client.post("/incidents/", json=incident_data)
-    after = datetime.now()
-
     assert response.status_code == 201
     data = response.json()
-    assert data["description"] == "Incident with auto-generated start_time"
-    assert "start_time" in data
 
-    start_time = datetime.fromisoformat(data["start_time"].replace("Z", "+00:00"))
-    assert before <= start_time <= after
+    after = datetime.now(timezone.utc)
+
+    assert "start_time" in data
+    start_time_str = data["start_time"].replace("Z", "+00:00")
+    start_time = datetime.fromisoformat(start_time_str)
+    if start_time.tzinfo is None:
+        start_time = start_time.replace(tzinfo=timezone.utc)
+
+    assert (
+        before <= start_time <= after
+    ), f"Expected start_time between {before} and {after}, got {start_time}"
+
+    assert data["description"] == "Incident without explicit start_time"
+    assert data["service_id"] == service["id"]
 
 
 def test_list_incidents(client):
